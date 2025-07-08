@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AHU Fault Diagnosis Questionnaire</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- MathJax scripts to render LaTeX -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body>
+
+    <div class="container">
+        <!-- Part 1: Introduction -->
+        <header>
+            <h1>AHU Fault Diagnosis Questionnaire for Bayesian Network Development</h1>
+            <p><strong>Dear Expert,</strong></p>
+            <!-- MODIFICATION START: Added estimated completion time -->
+            <p>Thank you for contributing your valuable expertise to this research project. We are developing a <strong>Diagnostic Bayesian Network (DBN)</strong> to improve fault detection and diagnosis (FDD) in Air Handling Units (AHUs). Your input will be used to define and refine the probabilistic relationships between system faults and their observable symptoms. The estimated time to complete this questionnaire is approximately 20-30 minutes.</p>
+            <!-- MODIFICATION END -->
+        </header>
+
+        <section id="instructions-section">
+            <h2>Instructions</h2>
+            <p>For each of the 11 faults presented, you will be asked to provide three types of input:</p>
+            <ol>
+                <li><strong>Fault Frequency:</strong> Judge how often the fault occurs in a typical facility.</li>
+                <li><strong>Symptom Selection:</strong> Select all symptoms that you believe could be caused by the fault.</li>
+                <li><strong>Influence & Confidence:</strong> For each symptom you selected, rate the fault's influence and your confidence in that rating.</li>
+            </ol>
+            
+            <h4>Degree of Influence</h4>
+            <p>Rate how strongly you believe the fault causes the symptom using the following linguistic scale.</p>
+            <ul>
+                <li><strong>Extremely High:</strong> The fault is a direct and almost certain cause of the symptom.</li>
+                <li><strong>Very High:</strong> The fault is a very strong and likely cause.</li>
+                <li><strong>High:</strong> The fault is a significant cause.</li>
+                <li><strong>Medium:</strong> The fault has a moderate, noticeable influence.</li>
+                <li><strong>Low:</strong> The fault has a minor or weak influence.
+                <li><strong>Very Low:</strong> The fault has a minimal, barely noticeable influence.</li>
+                <li><strong>Extremely Low:</strong> The fault is technically related but has a negligible influence.</li>
+            </ul>
+
+            <h4>Confidence</h4>
+            <p>Specify your confidence in your ratings.</p>
+             <ul>
+                <li>A <strong>high</strong> rating indicates <strong>high confidence</strong> or greater certainty.</li>
+                <li>A <strong>medium</strong> rating indicates confidence between high and low.</li>
+                <li>A <strong>low</strong> rating indicates <strong>low confidence</strong> or greater uncertainty.</li>
+            </ul>
+
+            <hr>
+
+            <h2>System Description & Reference</h2>
+            <h4>The Kropman Office Building Case Study</h4>
+            <p>The Kropman office building, located in Breda, Netherlands, was selected as the case study for this research. This building, owned and operated by a building services company, serves as a typical office building in Western Europe. This building was chosen as a case study due to the convenient availability of the necessary sensor and energy meter data for model calibration. Constructed in 1993 and subsequently renovated in 2009, the building is segmented into three distinct HVAC zones: North, South, and 1.05. A central AHU manages air supply and distribution, incorporating supply and return fans, supply and return filters, a Heat Recovery Wheel (HRW), and a heating coil. Notably, cooling is provided by three separate after-coolers dedicated to each of the building's zones, rather than a central cooling coil within the AHU. Energy is supplied by a gas-fired boiler for heating demands and a chiller during the cooling season. Beyond the AHU's heating coil, radiators in each of the three zones contribute to space heating. Interior temperature regulation employs a master-slave Proportional-Integral-Derivative (PID) control strategy.</p>
+            
+            <div id="pid-diagram-section">
+                <h4>P&ID System Diagram</h4>
+                <img src="pid-diagram.png" alt="P&ID Diagram of the AHU System" class="system-image" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                <p class="error-message" style="display:none; color: red; border: 1px solid red; padding: 10px; border-radius: 5px;">
+                    <strong>Image not found.</strong> Please make sure your image file (e.g., "pid-diagram.png") is in the same folder as your `index.html` file and the filename in the code matches.
+                </p>
+                <p><em>Figure 1: P&ID Diagram of the AHU System used in the case study.</em></p>
+            </div>
+
+        </section>
+
+        <hr>
+
+        <!-- MODIFICATION START: Updated the form action URL -->
+        <form action="https://formspree.io/f/mdkzrwpn" method="POST">
+        <!-- MODIFICATION END -->
+
+            <section id="background-section">
+                <h2>Part 1: Professional Background</h2>
+                <p>Please provide some information about your professional background.</p>
+                
+                <div class="form-group">
+                    <label for="position">1. What is your current or most recent professional position?</label>
+                    <select name="position" id="position" required>
+                        <option value="">-- Please select --</option>
+                        <option value="Senior academic">Senior academic</option>
+                        <option value="Junior academic">Junior academic</option>
+                        <option value="Engineer">Engineer</option>
+                        <option value="Technician">Technician</option>
+                        <option value="Worker">Worker</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="education">2. What is your highest level of education?</label>
+                    <select name="education" id="education" required>
+                        <option value="">-- Please select --</option>
+                        <option value="PhD">PhD</option>
+                        <option value="Master">Master</option>
+                        <option value="Bachelor">Bachelor</option>
+                        <option value="HND">Higher National Diploma (HND)</option>
+                        <option value="School level">School level</option>
+                    </select>
+                </div>
+                 <div class="form-group">
+                    <label for="experience">3. How many years of professional experience do you have in the HVAC field?</label>
+                    <select name="experience" id="experience" required>
+                        <option value="">-- Please select --</option>
+                        <option value="0-5">0-5 years</option>
+                        <option value="6-9">6-9 years</option>
+                        <option value="10-19">10-19 years</option>
+                        <option value="20-29">20-29 years</option>
+                        <option value="30+">30+ years</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="age">4. What is your age group?</label>
+                    <select name="age" id="age" required>
+                        <option value="">-- Please select --</option>
+                        <option value="Under 30">Under 30</option>
+                        <option value="30-39">30-39</option>
+                        <option value="40-49">40-49</option>
+                        <option value="50 or older">50 or older</option>
+                    </select>
+                </div>
+            </section>
+            
+            <hr>
+
+            <section id="questionnaire-section">
+                <h2>Part 2: Main Questionnaire</h2>
+                <p class="reference-note">If you are confused about any components or sensors, please check the <a href="#pid-diagram-section">Figure 1 P&ID</a> as a reference.</p>
+                <div id="fault-container">
+                    <!-- JavaScript will insert the current fault question here -->
+                </div>
+            </section>
+            
+        </form>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
