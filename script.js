@@ -197,12 +197,10 @@ function displayCurrentFault() {
         </div>
     `;
 
-    // MODIFICATION START: Save the current state before redrawing the rating table
     document.getElementById('symptom-selection').addEventListener('change', () => {
         saveCurrentAnswers();
         updateRatingTable();
     });
-    // MODIFICATION END
     
     document.getElementById('next-fault-btn').addEventListener('click', goToNextFault);
     
@@ -211,8 +209,6 @@ function displayCurrentFault() {
     }
     
     updateRatingTable();
-
-    document.getElementById('questionnaire-section').scrollIntoView({ behavior: 'smooth' });
 }
 
 function generateFrequencyHTML(faultName, savedFrequency, savedFrequencyConfidence) {
@@ -267,6 +263,7 @@ function goToPreviousFault() {
     if (currentFaultIndex > 0) {
         currentFaultIndex--;
         displayCurrentFault();
+        document.getElementById('questionnaire-section').scrollIntoView({ behavior: 'smooth' });
     }
 }
 
@@ -275,6 +272,7 @@ function goToNextFault() {
     currentFaultIndex++;
     if (currentFaultIndex < faults.length) {
         displayCurrentFault();
+        document.getElementById('questionnaire-section').scrollIntoView({ behavior: 'smooth' });
     } else {
         const bottomProgressHTML = `<div class="bottom-progress">${faults.length} / ${faults.length}</div>`;
         faultContainer.innerHTML = `
@@ -290,4 +288,58 @@ function goToNextFault() {
     }
 }
 
-document.addEventListener('DOMContentLoaded', displayCurrentFault);
+// MODIFICATION START: Added a function to handle the final form submission
+function handleSubmit(event) {
+    event.preventDefault(); // Stop the form from submitting immediately
+
+    // This helper function creates a hidden input field
+    function createHiddenInput(name, value) {
+        const input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = name;
+        input.value = value;
+        form.appendChild(input);
+    }
+
+    // Loop through all the saved answers and create hidden inputs for them
+    for (const key in answers) {
+        if (answers.hasOwnProperty(key)) {
+            const answerData = answers[key];
+            
+            // Handle frequency and its confidence
+            if (answerData.frequency) {
+                createHiddenInput(`${key}_frequency`, answerData.frequency);
+            }
+            if (answerData.frequencyConfidence) {
+                createHiddenInput(`${key}_frequency_confidence`, answerData.frequencyConfidence);
+            }
+
+            // Handle selected symptoms and their ratings
+            if (answerData.selectedSymptoms && answerData.selectedSymptoms.length > 0) {
+                // Join selected symptoms into a single comma-separated string
+                createHiddenInput(`${key}_selected_symptoms`, answerData.selectedSymptoms.join(', '));
+                
+                // Create inputs for each rating
+                for (const symptomId in answerData.ratings) {
+                    if (answerData.ratings.hasOwnProperty(symptomId)) {
+                        const rating = answerData.ratings[symptomId];
+                        createHiddenInput(`${key}_${symptomId}_influence`, rating.influence);
+                        createHiddenInput(`${key}_${symptomId}_confidence`, rating.confidence);
+                    }
+                }
+            }
+        }
+    }
+
+    // Now that all hidden inputs are added, submit the form
+    form.submit();
+}
+// MODIFICATION END
+
+document.addEventListener('DOMContentLoaded', () => {
+    displayCurrentFault();
+    // MODIFICATION START: Added event listener for the form submission
+    form.addEventListener('submit', handleSubmit);
+    // MODIFICATION END
+});
+
