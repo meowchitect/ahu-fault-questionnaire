@@ -16,9 +16,7 @@
         <header>
             <h1>AHU Fault Diagnosis Questionnaire for Bayesian Network Development</h1>
             <p><strong>Dear Expert,</strong></p>
-            <!-- MODIFICATION START: Added estimated completion time -->
-            <p>Thank you for contributing your valuable expertise to this research project. We are developing a <strong>Diagnostic Bayesian Network (DBN)</strong> to improve fault detection and diagnosis (FDD) in Air Handling Units (AHUs). Your input will be used to define and refine the probabilistic relationships between system faults and their observable symptoms. The estimated time to complete this questionnaire is <strong>approximately 20-30 minutes</strong>.</p>
-            <!-- MODIFICATION END -->
+            <p>Thank you for contributing your valuable expertise to this research project. We are developing a <strong>Diagnostic Bayesian Network (DBN)</strong> to improve fault detection and diagnosis (FDD) in Air Handling Units (AHUs). Your input will be used to define and refine the probabilistic relationships between system faults and their observable symptoms. The estimated time to complete this questionnaire is approximately 20-30 minutes.</p>
         </header>
 
         <section id="instructions-section">
@@ -46,7 +44,7 @@
             <p>Specify your confidence in your ratings.</p>
              <ul>
                 <li>A <strong>high</strong> rating indicates <strong>high confidence</strong> or greater certainty.</li>
-                <li>A <strong>medium</strong> rating indicates <strong>confidence between high and low</strong>.</li>
+                <li>A <strong>medium</strong> rating indicates confidence between high and low.</li>
                 <li>A <strong>low</strong> rating indicates <strong>low confidence</strong> or greater uncertainty.</li>
             </ul>
 
@@ -56,6 +54,16 @@
             <h4>The Kropman Office Building Case Study</h4>
             <p>The Kropman office building, located in Breda, Netherlands, was selected as the case study for this research. This building, owned and operated by a building services company, serves as a typical office building in Western Europe. This building was chosen as a case study due to the convenient availability of the necessary sensor and energy meter data for model calibration. Constructed in 1993 and subsequently renovated in 2009, the building is segmented into three distinct HVAC zones: North, South, and 1.05. A central AHU manages air supply and distribution, incorporating supply and return fans, supply and return filters, a Heat Recovery Wheel (HRW), and a heating coil. Notably, cooling is provided by three separate after-coolers dedicated to each of the building's zones, rather than a central cooling coil within the AHU. Energy is supplied by a gas-fired boiler for heating demands and a chiller during the cooling season. Beyond the AHU's heating coil, radiators in each of the three zones contribute to space heating. Interior temperature regulation employs a master-slave Proportional-Integral-Derivative (PID) control strategy.</p>
             
+            <!-- MODIFICATION START: Added key system parameters -->
+            <p><strong>Key System Parameters:</strong></p>
+            <ul>
+                <li>HRW nominal efficiency is 71%.</li>
+                <li>Normal CO₂ concentration should be less than 500 ppm.</li>
+                <li>Normal pressure setpoint is 250 Pa in winter.</li>
+                <li>Normal supply temperature setpoint should be less than 26°C in winter.</li>
+            </ul>
+            <!-- MODIFICATION END -->
+
             <div id="pid-diagram-section">
                 <h4>P&ID System Diagram</h4>
                 <img src="pid-diagram.png" alt="P&ID Diagram of the AHU System" class="system-image" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
@@ -69,9 +77,7 @@
 
         <hr>
 
-        <!-- MODIFICATION START: Updated the form action URL -->
-        <form action="https://formspree.io/f/mdkzrwpn" method="POST">
-        <!-- MODIFICATION END -->
+        <form action="https://script.google.com/macros/s/AKfycbzTTvLQbl-Zdn6cLVHXTboSNBSDmzg4DP04LkDImMblkq5tsJzgna0X9jWgmFcf9wT8/exec" method="POST">
 
             <section id="background-section">
                 <h2>Part 1: Professional Background</h2>
