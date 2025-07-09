@@ -245,8 +245,6 @@ function handleSubmit(event) {
 
     const formData = new FormData();
     
-    // MODIFICATION: Removed the placeholder appends for timestamp and submission_id.
-    
     formData.append('position', document.getElementById('position').value);
     formData.append('education', document.getElementById('education').value);
     formData.append('experience', document.getElementById('experience').value);
