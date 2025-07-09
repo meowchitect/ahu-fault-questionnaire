@@ -66,7 +66,6 @@ select, input[type="text"] {
     align-items: center;
 }
 
-/* MODIFICATION START: Added styles for progress indicator and reference note */
 #fault-container h3 .fault-progress {
     font-weight: normal;
     font-size: 0.85em;
@@ -80,7 +79,6 @@ select, input[type="text"] {
     margin: 20px 0;
     border-radius: 0 4px 4px 0;
 }
-/* MODIFICATION END */
 
 #frequency-section {
     background-color: #fdfdfd;
@@ -188,9 +186,82 @@ button:disabled {
     cursor: not-allowed;
 }
 
+.bottom-progress {
+    color: #6c757d;
+    font-weight: bold;
+}
+
 .system-image {
     max-width: 750px; 
     height: auto;
     display: block;
     margin: 20px auto;
 }
+
+
+/* ================================================================== */
+/* MODIFICATION START: Added Responsive Styles for Mobile Devices     */
+/* ================================================================== */
+@media (max-width: 768px) {
+    body {
+        padding: 5px; /* Reduce padding on the body for smaller screens */
+    }
+
+    .container {
+        padding: 15px; /* Reduce padding inside the main container */
+    }
+
+    h1 {
+        font-size: 1.5em; /* Make main title smaller */
+    }
+
+    h2 {
+        font-size: 1.3em;
+    }
+
+    /* 1. Make P&ID diagram fit the screen width */
+    .system-image {
+        max-width: 100%; /* Image will not exceed the container width */
+    }
+
+    /* 2. Fix symptom selection text overflow by making it a single column */
+    #symptom-selection {
+        grid-template-columns: 1fr; /* Stack the checklist items vertically */
+    }
+
+    /* 3. Fix narrow table column by reducing font size and padding */
+    #rating-table {
+        font-size: 0.9em; /* Reduce font size for the whole table */
+    }
+
+    #rating-table th, #rating-table td {
+        padding: 8px; /* Reduce padding in table cells */
+    }
+
+    #rating-table td:first-child {
+        width: 35%; /* Allow first column to be a bit narrower on mobile */
+    }
+
+    /* Make buttons and progress indicator stack nicely */
+    .button-container {
+        flex-direction: column-reverse; /* Stack buttons vertically */
+        gap: 15px; /* Add space between stacked items */
+    }
+
+    .button-container .bottom-progress {
+        order: 1; /* Move progress indicator to the top of the stack */
+    }
+
+    #next-fault-btn, #prev-fault-btn, button[type="submit"] {
+        width: 100%; /* Make buttons full-width */
+    }
+
+    #fault-container h3 {
+        flex-direction: column;
+        gap: 5px;
+        text-align: center;
+    }
+}
+/* ================================================================ */
+/* MODIFICATION END                                                 */
+/* ================================================================ */
