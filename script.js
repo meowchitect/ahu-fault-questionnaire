@@ -19,7 +19,7 @@ const symptoms = [
     { id: 'S4', name: 'Heating coil valve position (\\(U_{\\text{hc}}\\)) is too high or too low than the expected value. (large than 18%)' },
     { id: 'S5', name: 'Pre-heating air temperature (\\(T_{\\text{pre}}\\)) is too high (1 °C  larger than return temperature (\\(T_{\\text{ra}}\\)))' },
     { id: 'S6', name: 'Supply air temperature (\\(T_{\\text{sa}}\\)) is too high or too low than the expected value. ( larger than 1.19  °C)' },
-    { id: 'S7', name: 'CO₂ concentration in office room is too high. ( higher than 500 ppm)' },
+    { id: 'S7', name: '\\(CO_{\\text{2}}\\) concentration in office room is too high. ( higher than 500 ppm)' },
     { id: 'S8', name: 'Heat recovery efficiency (\\(\\eta_{\\text{sa}}\\)) is too high. (higher than 90%)' },
     { id: 'S9', name: 'Supply air static pressure (\\(P_{\\text{sa}}\\)) is too high or too low than the expected value. (larger than 11.46 Pa)' },
     { id: 'S10', name: 'Heat recovery efficiency (\\(\\eta_{\\text{sa}}\\)) is too low (lower than 71%)' },
