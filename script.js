@@ -19,7 +19,7 @@ const symptoms = [
     { id: 'S4', name: 'Heating coil valve position (\\(U_{\\text{hc}}\\)) is too high or too low than the expected value. (large than 18%)' },
     { id: 'S5', name: 'Pre-heating air temperature (\\(T_{\\text{pre}}\\)) is too high (1 °C  larger than return temperature (\\(T_{\\text{ra}}\\)))' },
     { id: 'S6', name: 'Supply air temperature (\\(T_{\\text{sa}}\\)) is too high or too low than the expected value. ( larger than 1.19  °C)' },
-    { id: 'S7', name: 'CO2 concentration in office room is too high. ( higher than 500 ppm)' },
+    { id: 'S7', name: 'CO₂ concentration in office room is too high. ( higher than 500 ppm)' },
     { id: 'S8', name: 'Heat recovery efficiency (\\(\\eta_{\\text{sa}}\\)) is too high. (higher than 90%)' },
     { id: 'S9', name: 'Supply air static pressure (\\(P_{\\text{sa}}\\)) is too high or too low than the expected value. (larger than 11.46 Pa)' },
     { id: 'S10', name: 'Heat recovery efficiency (\\(\\eta_{\\text{sa}}\\)) is too low (lower than 71%)' },
@@ -27,7 +27,7 @@ const symptoms = [
     { id: 'S12', name: 'Difference between supply heat recovery efficiency (\\(\\eta_{\\text{sa}}\\)) and return heat recovery efficiency (\\(\\eta_{\\text{eha}}\\)) is large' },
     { id: 'S13', name: 'Supply air temperature sensor (\\(T_{\\text{sa}}\\)) reading differs from a nearby temperature sensor reading(Larger than 1 °C)' },
     { id: 'S14', name: 'Supply pressure setpoint (\\(P_{\\text{sa,set}}\\)) is too high (300 Pa) relative to the winter outdoor temperature' },
-    { id: 'S15', name: 'Supply temperature setpoint (\\(T_{\\text{sa,set}}\\)) is too high (26) relative to winter outdoor temperature' },
+    { id: 'S15', name: 'Supply temperature setpoint (\\(T_{\\text{sa,set}}\\)) is too high (26 °C) relative to winter outdoor temperature' },
     { id: 'S16', name: 'Flowrate sensor reading is too low while fan speed is normal' },
     { id: 'S17', name: 'Return air temperature sensor (\\(T_{\\text{ra}}\\)) reading differs from a nearby temperature sensor reading (larger than 1 °C)' },
     { id: 'S18', name: 'Supply fan pressure drop (\\(\\Delta P_{\\text{sf}}\\)) is too high or too low than the expected value. ( larger than 59.58 Pa)' },
@@ -181,19 +181,20 @@ function displayCurrentFault() {
     updateRatingTable();
 }
 
+// MODIFICATION START: Changed the 'value' attributes to the 7-level scale
 function generateFrequencyHTML(faultName, savedFrequency, savedFrequencyConfidence) {
     return `
         <div id="frequency-section">
             <h4>Step 1: Fault Frequency</h4>
             <div class="form-group">
                 <label>Based on your experience, how often do you think ${faultName} happens?</label>
-                <div class="frequency-option"><input type="radio" id="freq-vf" name="fault_frequency" value="very_frequent" ${savedFrequency === 'very_frequent' ? 'checked' : ''} required><label for="freq-vf">More than 10 times a year—very frequent</label></div>
-                <div class="frequency-option"><input type="radio" id="freq-c" name="fault_frequency" value="common" ${savedFrequency === 'common' ? 'checked' : ''}><label for="freq-c">Every few months; a common, recurring problem</label></div>
-                <div class="frequency-option"><input type="radio" id="freq-a" name="fault_frequency" value="annual" ${savedFrequency === 'annual' ? 'checked' : ''}><label for="freq-a">Annually or a few times a year</label></div>
-                <div class="frequency-option"><input type="radio" id="freq-b" name="fault_frequency" value="biennial" ${savedFrequency === 'biennial' ? 'checked' : ''}><label for="freq-b">About once every year or two</label></div>
-                <div class="frequency-option"><input type="radio" id="freq-r" name="fault_frequency" value="rare" ${savedFrequency === 'rare' ? 'checked' : ''}><label for="freq-r">Every 3 to 10 years—rare but possible</label></div>
-                <div class="frequency-option"><input type="radio" id="freq-vr" name="fault_frequency" value="very_rare" ${savedFrequency === 'very_rare' ? 'checked' : ''}><label for="freq-vr">Once every 10–30 years—very rare</label></div>
-                <div class="frequency-option"><input type="radio" id="freq-n" name="fault_frequency" value="never" ${savedFrequency === 'never' ? 'checked' : ''}><label for="freq-n">Less than once in 30 years—almost never seen</label></div>
+                <div class="frequency-option"><input type="radio" id="freq-vf" name="fault_frequency" value="EH" ${savedFrequency === 'EH' ? 'checked' : ''} required><label for="freq-vf">More than 10 times a year—very frequent</label></div>
+                <div class="frequency-option"><input type="radio" id="freq-c" name="fault_frequency" value="VH" ${savedFrequency === 'VH' ? 'checked' : ''}><label for="freq-c">Every few months; a common, recurring problem</label></div>
+                <div class="frequency-option"><input type="radio" id="freq-a" name="fault_frequency" value="H" ${savedFrequency === 'H' ? 'checked' : ''}><label for="freq-a">Annually or a few times a year</label></div>
+                <div class="frequency-option"><input type="radio" id="freq-b" name="fault_frequency" value="M" ${savedFrequency === 'M' ? 'checked' : ''}><label for="freq-b">About once every year or two</label></div>
+                <div class="frequency-option"><input type="radio" id="freq-r" name="fault_frequency" value="L" ${savedFrequency === 'L' ? 'checked' : ''}><label for="freq-r">Every 3 to 10 years—rare but possible</label></div>
+                <div class="frequency-option"><input type="radio" id="freq-vr" name="fault_frequency" value="VL" ${savedFrequency === 'VL' ? 'checked' : ''}><label for="freq-vr">Once every 10–30 years—very rare</label></div>
+                <div class="frequency-option"><input type="radio" id="freq-n" name="fault_frequency" value="EL" ${savedFrequency === 'EL' ? 'checked' : ''}><label for="freq-n">Less than once in 30 years—almost never seen</label></div>
             </div>
             <div class="form-group confidence-group">
                 <label for="fault_frequency_confidence">Confidence in your frequency rating:</label>
@@ -207,6 +208,7 @@ function generateFrequencyHTML(faultName, savedFrequency, savedFrequencyConfiden
         </div>
     `;
 }
+// MODIFICATION END
 
 function goToPreviousFault() {
     if (currentFaultIndex > 0) {
