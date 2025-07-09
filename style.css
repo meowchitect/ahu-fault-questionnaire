@@ -204,15 +204,15 @@ button:disabled {
 /* ================================================================== */
 @media (max-width: 768px) {
     body {
-        padding: 5px; /* Reduce padding on the body for smaller screens */
+        padding: 5px;
     }
 
     .container {
-        padding: 15px; /* Reduce padding inside the main container */
+        padding: 15px;
     }
 
     h1 {
-        font-size: 1.5em; /* Make main title smaller */
+        font-size: 1.5em;
     }
 
     h2 {
@@ -221,39 +221,80 @@ button:disabled {
 
     /* 1. Make P&ID diagram fit the screen width */
     .system-image {
-        max-width: 100%; /* Image will not exceed the container width */
+        max-width: 100%;
     }
 
-    /* 2. Fix symptom selection text overflow by making it a single column */
+    /* 2. Fix symptom selection text overflow */
     #symptom-selection {
-        grid-template-columns: 1fr; /* Stack the checklist items vertically */
+        grid-template-columns: 1fr;
     }
 
-    /* 3. Fix narrow table column by reducing font size and padding */
+    #symptom-selection label {
+        word-break: break-word; /* Force long text to wrap */
+    }
+
+    /* 3. Restructure the rating table for mobile */
     #rating-table {
-        font-size: 0.9em; /* Reduce font size for the whole table */
+        border: none; /* Remove table border */
     }
 
-    #rating-table th, #rating-table td {
-        padding: 8px; /* Reduce padding in table cells */
+    #rating-table thead {
+        /* Hide the original table headers on mobile */
+        display: none;
+    }
+
+    #rating-table tr {
+        /* Each row becomes a card-like block */
+        display: block;
+        margin-bottom: 20px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        padding: 10px;
+    }
+
+    #rating-table td {
+        /* Cells stack vertically */
+        display: block;
+        text-align: right; /* Align content to the right */
+        border: none;
+        border-bottom: 1px dotted #ccc;
+        padding: 10px 5px;
+    }
+
+    #rating-table td:last-child {
+        border-bottom: none;
     }
 
     #rating-table td:first-child {
-        width: 35%; /* Allow first column to be a bit narrower on mobile */
+        /* Make the symptom description full width and left-aligned */
+        width: 100%;
+        text-align: left;
+        background-color: #f9f9f9;
+        font-weight: bold;
+        margin-bottom: 10px;
+        border-bottom: 1px solid #ddd;
+    }
+    
+    #rating-table td::before {
+        /* Add the column header text before each cell's content */
+        content: attr(data-label);
+        float: left;
+        font-weight: bold;
+        text-align: left;
     }
 
     /* Make buttons and progress indicator stack nicely */
     .button-container {
-        flex-direction: column-reverse; /* Stack buttons vertically */
-        gap: 15px; /* Add space between stacked items */
+        flex-direction: column-reverse;
+        gap: 15px;
     }
 
     .button-container .bottom-progress {
-        order: 1; /* Move progress indicator to the top of the stack */
+        order: 1;
     }
 
     #next-fault-btn, #prev-fault-btn, button[type="submit"] {
-        width: 100%; /* Make buttons full-width */
+        width: 100%;
     }
 
     #fault-container h3 {
