@@ -40,6 +40,9 @@ let currentFaultIndex = 0;
 const faultContainer = document.getElementById('fault-container');
 const form = document.querySelector('form');
 
+// MODIFICATION: Added your Google Script URL
+const scriptURL = 'https://script.google.com/macros/s/AKfycbzTTvLQbl-Zdn6cLVHXTboSNBSDmzg4DP04LkDImMblkq5tsJzgna0X9jWgmFcf9wT8/exec';
+
 function saveCurrentAnswers() {
     if (currentFaultIndex >= faults.length) {
         return;
@@ -50,16 +53,13 @@ function saveCurrentAnswers() {
     if (fault.type === 'individual' || fault.type === 'sensor_bias_start') {
         const frequencyEl = document.querySelector('input[name="fault_frequency"]:checked');
         const frequencyConfidenceEl = document.querySelector('select[name="fault_frequency_confidence"]');
-        
         const frequencyKey = fault.type === 'sensor_bias_start' ? 'sensor_bias' : faultId;
-        
         if (!answers[frequencyKey]) answers[frequencyKey] = {};
         answers[frequencyKey].frequency = frequencyEl ? frequencyEl.value : '';
         answers[frequencyKey].frequencyConfidence = frequencyConfidenceEl ? frequencyConfidenceEl.value : '';
     }
     
     const selectedSymptoms = Array.from(document.querySelectorAll(`#symptom-selection input[type="checkbox"]:checked`)).map(cb => cb.value);
-    
     const ratings = {};
     selectedSymptoms.forEach(symptomId => {
         const influenceEl = document.querySelector(`select[name="${faultId}_${symptomId}_influence"]`);
@@ -79,18 +79,14 @@ function updateRatingTable() {
     const faultId = faults[currentFaultIndex].id;
     const selectedCheckboxes = document.querySelectorAll('#symptom-selection input[type="checkbox"]:checked');
     const tableBody = document.getElementById('rating-table-body');
-    
     tableBody.innerHTML = '';
-
     const savedRatings = (answers[faultId] && answers[faultId].ratings) ? answers[faultId].ratings : {};
 
     selectedCheckboxes.forEach(checkbox => {
         const symptomId = checkbox.value;
         const symptom = symptoms.find(s => s.id === symptomId);
-
         const savedInfluence = (savedRatings[symptomId]) ? savedRatings[symptomId].influence : '';
         const savedConfidence = (savedRatings[symptomId]) ? savedRatings[symptomId].confidence : '';
-
         const row = document.createElement('tr');
         row.innerHTML = `
             <td><b>${symptom.id}</b>: ${symptom.name}</td>
@@ -126,7 +122,6 @@ function updateRatingTable() {
 function displayCurrentFault() {
     const fault = faults[currentFaultIndex];
     const faultId = fault.id;
-    
     let frequencyQuestionHTML = '';
     let savedFrequency = '';
     let savedFrequencyConfidence = '';
@@ -144,7 +139,6 @@ function displayCurrentFault() {
     }
 
     const savedSelections = (answers[faultId] && answers[faultId].selectedSymptoms) ? answers[faultId].selectedSymptoms : [];
-
     const symptomChecklistHTML = symptoms.map(s => {
         const isChecked = savedSelections.includes(s.id);
         return `
@@ -155,12 +149,8 @@ function displayCurrentFault() {
         `;
     }).join('');
 
-    const prevButtonHTML = currentFaultIndex > 0 
-        ? `<button type="button" id="prev-fault-btn">Previous Fault</button>` 
-        : `<div></div>`; 
-
+    const prevButtonHTML = currentFaultIndex > 0 ? `<button type="button" id="prev-fault-btn">Previous Fault</button>` : `<div></div>`;
     const nextButtonText = currentFaultIndex === faults.length - 1 ? 'Finish' : 'Next Fault';
-    
     const bottomProgressHTML = `<div class="bottom-progress">${currentFaultIndex + 1} / ${faults.length}</div>`;
 
     faultContainer.innerHTML = `
@@ -168,46 +158,27 @@ function displayCurrentFault() {
             <span><b>${fault.id}</b>: ${fault.name}</span>
             <span class="fault-progress">Fault ${currentFaultIndex + 1} of ${faults.length}</span>
         </h3>
-        
         ${frequencyQuestionHTML}
-
         <h4>Step ${frequencyQuestionHTML ? '2' : '1'}: Symptom Selection</h4>
         <p>Please select all symptoms that could be caused by this fault.</p>
-        <div id="symptom-selection">
-            ${symptomChecklistHTML}
-        </div>
-
+        <div id="symptom-selection">${symptomChecklistHTML}</div>
         <h4>Step ${frequencyQuestionHTML ? '3' : '2'}: Rate Selected Symptoms</h4>
         <p>For each symptom you selected, provide your rating.</p>
         <table id="rating-table">
-            <thead>
-                <tr>
-                    <th>Selected Symptom</th>
-                    <th>Degree of Influence</th>
-                    <th>Confidence</th>
-                </tr>
-            </thead>
+            <thead><tr><th>Selected Symptom</th><th>Degree of Influence</th><th>Confidence</th></tr></thead>
             <tbody id="rating-table-body"></tbody>
         </table>
-        
-        <div class="button-container">
-            ${prevButtonHTML}
-            ${bottomProgressHTML}
-            <button type="button" id="next-fault-btn">${nextButtonText}</button>
-        </div>
+        <div class="button-container">${prevButtonHTML}${bottomProgressHTML}<button type="button" id="next-fault-btn">${nextButtonText}</button></div>
     `;
 
     document.getElementById('symptom-selection').addEventListener('change', () => {
         saveCurrentAnswers();
         updateRatingTable();
     });
-    
     document.getElementById('next-fault-btn').addEventListener('click', goToNextFault);
-    
     if (currentFaultIndex > 0) {
         document.getElementById('prev-fault-btn').addEventListener('click', goToPreviousFault);
     }
-    
     updateRatingTable();
 }
 
@@ -217,34 +188,13 @@ function generateFrequencyHTML(faultName, savedFrequency, savedFrequencyConfiden
             <h4>Step 1: Fault Frequency</h4>
             <div class="form-group">
                 <label>Based on your experience, how often do you think ${faultName} happens?</label>
-                <div class="frequency-option">
-                    <input type="radio" id="freq-vf" name="fault_frequency" value="very_frequent" ${savedFrequency === 'very_frequent' ? 'checked' : ''} required>
-                    <label for="freq-vf">More than 10 times a year—very frequent</label>
-                </div>
-                <div class="frequency-option">
-                    <input type="radio" id="freq-c" name="fault_frequency" value="common" ${savedFrequency === 'common' ? 'checked' : ''}>
-                    <label for="freq-c">Every few months; a common, recurring problem</label>
-                </div>
-                <div class="frequency-option">
-                    <input type="radio" id="freq-a" name="fault_frequency" value="annual" ${savedFrequency === 'annual' ? 'checked' : ''}>
-                    <label for="freq-a">Annually or a few times a year</label>
-                </div>
-                <div class="frequency-option">
-                    <input type="radio" id="freq-b" name="fault_frequency" value="biennial" ${savedFrequency === 'biennial' ? 'checked' : ''}>
-                    <label for="freq-b">About once every year or two</label>
-                </div>
-                <div class="frequency-option">
-                    <input type="radio" id="freq-r" name="fault_frequency" value="rare" ${savedFrequency === 'rare' ? 'checked' : ''}>
-                    <label for="freq-r">Every 3 to 10 years—rare but possible</label>
-                </div>
-                <div class="frequency-option">
-                    <input type="radio" id="freq-vr" name="fault_frequency" value="very_rare" ${savedFrequency === 'very_rare' ? 'checked' : ''}>
-                    <label for="freq-vr">Once every 10–30 years—very rare</label>
-                </div>
-                <div class="frequency-option">
-                    <input type="radio" id="freq-n" name="fault_frequency" value="never" ${savedFrequency === 'never' ? 'checked' : ''}>
-                    <label for="freq-n">Less than once in 30 years—almost never seen</label>
-                </div>
+                <div class="frequency-option"><input type="radio" id="freq-vf" name="fault_frequency" value="very_frequent" ${savedFrequency === 'very_frequent' ? 'checked' : ''} required><label for="freq-vf">More than 10 times a year—very frequent</label></div>
+                <div class="frequency-option"><input type="radio" id="freq-c" name="fault_frequency" value="common" ${savedFrequency === 'common' ? 'checked' : ''}><label for="freq-c">Every few months; a common, recurring problem</label></div>
+                <div class="frequency-option"><input type="radio" id="freq-a" name="fault_frequency" value="annual" ${savedFrequency === 'annual' ? 'checked' : ''}><label for="freq-a">Annually or a few times a year</label></div>
+                <div class="frequency-option"><input type="radio" id="freq-b" name="fault_frequency" value="biennial" ${savedFrequency === 'biennial' ? 'checked' : ''}><label for="freq-b">About once every year or two</label></div>
+                <div class="frequency-option"><input type="radio" id="freq-r" name="fault_frequency" value="rare" ${savedFrequency === 'rare' ? 'checked' : ''}><label for="freq-r">Every 3 to 10 years—rare but possible</label></div>
+                <div class="frequency-option"><input type="radio" id="freq-vr" name="fault_frequency" value="very_rare" ${savedFrequency === 'very_rare' ? 'checked' : ''}><label for="freq-vr">Once every 10–30 years—very rare</label></div>
+                <div class="frequency-option"><input type="radio" id="freq-n" name="fault_frequency" value="never" ${savedFrequency === 'never' ? 'checked' : ''}><label for="freq-n">Less than once in 30 years—almost never seen</label></div>
             </div>
             <div class="form-group confidence-group">
                 <label for="fault_frequency_confidence">Confidence in your frequency rating:</label>
@@ -268,7 +218,7 @@ function goToPreviousFault() {
 }
 
 function goToNextFault() {
-    saveCurrentAnswers(); 
+    saveCurrentAnswers();
     currentFaultIndex++;
     if (currentFaultIndex < faults.length) {
         displayCurrentFault();
@@ -288,58 +238,49 @@ function goToNextFault() {
     }
 }
 
-// MODIFICATION START: Added a function to handle the final form submission
 function handleSubmit(event) {
-    event.preventDefault(); // Stop the form from submitting immediately
+    event.preventDefault();
+    const submitButton = event.target.querySelector('button[type="submit"]');
+    submitButton.disabled = true;
+    submitButton.textContent = 'Submitting...';
 
-    // This helper function creates a hidden input field
-    function createHiddenInput(name, value) {
-        const input = document.createElement('input');
-        input.type = 'hidden';
-        input.name = name;
-        input.value = value;
-        form.appendChild(input);
-    }
-
-    // Loop through all the saved answers and create hidden inputs for them
+    const formData = new FormData();
+    
+    formData.append('position', document.getElementById('position').value);
+    formData.append('education', document.getElementById('education').value);
+    formData.append('experience', document.getElementById('experience').value);
+    formData.append('age', document.getElementById('age').value);
+    
     for (const key in answers) {
         if (answers.hasOwnProperty(key)) {
             const answerData = answers[key];
-            
-            // Handle frequency and its confidence
-            if (answerData.frequency) {
-                createHiddenInput(`${key}_frequency`, answerData.frequency);
-            }
-            if (answerData.frequencyConfidence) {
-                createHiddenInput(`${key}_frequency_confidence`, answerData.frequencyConfidence);
-            }
-
-            // Handle selected symptoms and their ratings
+            if (answerData.frequency) formData.append(`${key}_frequency`, answerData.frequency);
+            if (answerData.frequencyConfidence) formData.append(`${key}_frequency_confidence`, answerData.frequencyConfidence);
             if (answerData.selectedSymptoms && answerData.selectedSymptoms.length > 0) {
-                // Join selected symptoms into a single comma-separated string
-                createHiddenInput(`${key}_selected_symptoms`, answerData.selectedSymptoms.join(', '));
-                
-                // Create inputs for each rating
+                formData.append(`${key}_selected_symptoms`, answerData.selectedSymptoms.join(', '));
                 for (const symptomId in answerData.ratings) {
                     if (answerData.ratings.hasOwnProperty(symptomId)) {
                         const rating = answerData.ratings[symptomId];
-                        createHiddenInput(`${key}_${symptomId}_influence`, rating.influence);
-                        createHiddenInput(`${key}_${symptomId}_confidence`, rating.confidence);
+                        formData.append(`${key}_${symptomId}_influence`, rating.influence);
+                        formData.append(`${key}_${symptomId}_confidence`, rating.confidence);
                     }
                 }
             }
         }
     }
 
-    // Now that all hidden inputs are added, submit the form
-    form.submit();
+    fetch(scriptURL, { method: 'POST', body: formData })
+        .then(response => {
+            faultContainer.innerHTML = `<h2>Submission successful!</h2><p>Thank you for your contribution. You may now close this window.</p>`;
+        })
+        .catch(error => {
+            faultContainer.innerHTML = `<h2>Error!</h2><p>There was a problem submitting your answers. Please try again or contact us.</p><p><small>Error: ${error.message}</small></p>`;
+            submitButton.disabled = false;
+            submitButton.textContent = 'Submit All Answers';
+        });
 }
-// MODIFICATION END
 
 document.addEventListener('DOMContentLoaded', () => {
     displayCurrentFault();
-    // MODIFICATION START: Added event listener for the form submission
     form.addEventListener('submit', handleSubmit);
-    // MODIFICATION END
 });
-
