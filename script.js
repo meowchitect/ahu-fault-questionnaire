@@ -161,7 +161,7 @@ function displayCurrentFault() {
         </h3>
         ${frequencyQuestionHTML}
         <h4>Step ${frequencyQuestionHTML ? '2' : '1'}: Symptom Selection</h4>
-        <p>Please select all symptoms that could be caused by this fault.</p>
+        <p>Please select all symptoms that could be caused by this fault. If you do not find any related symptoms, you may skip this part without making any selections and click the "Next" button directly.</p>
         <div id="symptom-selection">${symptomChecklistHTML}</div>
         <h4>Step ${frequencyQuestionHTML ? '3' : '2'}: Rate Selected Symptoms</h4>
         <p>For each symptom you selected, provide your rating.</p>
